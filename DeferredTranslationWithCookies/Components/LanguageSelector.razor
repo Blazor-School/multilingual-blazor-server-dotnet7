@@ -1,0 +1,20 @@
+﻿@using Microsoft.Extensions.Localization
+@using System.Globalization
+@inject NavigationManager NavigationManager
+
+<select @onchange="OnChangeLanguage">
+    <option value="">Select</option>
+    <option value="en">English</option>
+    <option value="fr">France</option>
+</select>
+
+@code {
+    private void OnChangeLanguage(ChangeEventArgs e)
+    {
+        var uri = new Uri(NavigationManager.Uri).GetComponents(UriComponents.PathAndQuery, UriFormat.Unescaped);
+        var culture = CultureInfo.GetCultureInfo(e.Value as string);
+        var cultureEscaped = Uri.EscapeDataString(culture.Name);
+        var uriEscaped = Uri.EscapeDataString(uri);
+        NavigationManager.NavigateTo($"Culture/Set?culture={cultureEscaped}&redirectUri={uriEscaped}", forceLoad: true);
+    }
+}

@@ -1,0 +1,31 @@
+﻿@using System.Web;
+@using System.Globalization;
+@using Microsoft.AspNetCore.Localization;
+@using Microsoft.Extensions.Options;
+@inject NavigationManager NavigationManager
+@inject IOptions<RequestLocalizationOptions> RequestLocalizationOptions
+
+<Router AppAssembly="@typeof(App).Assembly">
+    <Found Context="routeData">
+        <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
+        <FocusOnNavigate RouteData="@routeData" Selector="h1" />
+    </Found>
+    <NotFound>
+        <PageTitle>Not found</PageTitle>
+        <LayoutView Layout="@typeof(MainLayout)">
+            <p role="alert">Sorry, there's nothing at this address.</p>
+        </LayoutView>
+    </NotFound>
+</Router>
+
+@code {
+    protected override void OnInitialized()
+    {
+        var uri = new Uri(NavigationManager.Uri);
+        var urlParameters = HttpUtility.ParseQueryString(uri.Query);
+        var defaultCulture = RequestLocalizationOptions.Value.DefaultRequestCulture.Culture;
+        var cultureProvider = RequestLocalizationOptions.Value.RequestCultureProviders.First(p => p is QueryStringRequestCultureProvider) as QueryStringRequestCultureProvider;
+        CultureInfo.CurrentCulture = CultureInfo.GetCultureInfo(urlParameters[cultureProvider.QueryStringKey] ?? defaultCulture.Name);
+        CultureInfo.CurrentUICulture = CultureInfo.GetCultureInfo(urlParameters[cultureProvider.UIQueryStringKey] ?? CultureInfo.CurrentCulture.Name);
+    }
+}

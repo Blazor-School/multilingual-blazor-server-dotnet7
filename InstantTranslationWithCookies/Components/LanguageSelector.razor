@@ -1,0 +1,40 @@
+﻿@using InstantTranslationWithCookies.Utilities;
+@using Microsoft.AspNetCore.Localization
+@using Microsoft.Extensions.Localization
+@using System.Globalization
+@using System.Web
+@inject NavigationManager NavigationManager
+@inject IJSRuntime JSRuntime
+@inject BlazorSchoolLanguageNotifier BlazorSchoolLanguageNotifier
+@implements IAsyncDisposable
+
+<select @onchange="OnChangeLanguage">
+    <option value="">Select</option>
+    <option value="en">English</option>
+    <option value="fr">France</option>
+</select>
+
+@code {
+    private Lazy<IJSObjectReference> LanguageSelectorModule = new();
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        LanguageSelectorModule = new(await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./js/BlazorSchoolLanguageSelector.js"));
+    }
+
+    private void OnChangeLanguage(ChangeEventArgs e)
+    {
+        CultureInfo.CurrentCulture = CultureInfo.GetCultureInfo((string)e.Value);
+        CultureInfo.CurrentUICulture = CultureInfo.GetCultureInfo((string)e.Value);
+        LanguageSelectorModule.Value.InvokeVoidAsync("addCookies", CookieRequestCultureProvider.DefaultCookieName, CookieRequestCultureProvider.MakeCookieValue(new(CultureInfo.CurrentCulture, CultureInfo.CurrentUICulture)));
+        BlazorSchoolLanguageNotifier.NotifyLanguageChange();
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if (LanguageSelectorModule.IsValueCreated)
+        {
+            await LanguageSelectorModule.Value.DisposeAsync();
+        }
+    }
+}

@@ -5,23 +5,24 @@ namespace InstantTranslationWithCookies.Utilities;
 
 public class BlazorSchoolRequestCultureProvider : RequestCultureProvider
 {
-    public string DefaultCulture { get; set; }
+    private readonly RequestLocalizationOptions _options;
 
-    public BlazorSchoolRequestCultureProvider(string defaultCulture)
+    public BlazorSchoolRequestCultureProvider(RequestLocalizationOptions options)
     {
-        DefaultCulture = defaultCulture;
+        _options = options;
     }
 
     public override Task<ProviderCultureResult?> DetermineProviderCultureResult(HttpContext httpContext)
     {
         string inputCulture = httpContext.Request.Cookies[CookieRequestCultureProvider.DefaultCookieName] ?? "";
+        var defaultCulture = _options.DefaultRequestCulture.Culture;
         var result = CookieRequestCultureProvider.ParseCookieValue(inputCulture);
 
         if (result is null)
         {
-            CultureInfo.CurrentCulture = CultureInfo.GetCultureInfo(DefaultCulture);
-            CultureInfo.CurrentUICulture = CultureInfo.GetCultureInfo(DefaultCulture);
-            result = new(DefaultCulture);
+            CultureInfo.CurrentCulture = defaultCulture;
+            CultureInfo.CurrentUICulture = defaultCulture;
+            result = new(defaultCulture.Name);
         }
         else
         {

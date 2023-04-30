@@ -1,0 +1,30 @@
+﻿@using InstantTranslationWithLocalStorage.Utilities;
+@using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
+@using Microsoft.AspNetCore.Localization
+@using Microsoft.Extensions.Localization
+@using System.Globalization
+@using System.Web
+@inject NavigationManager NavigationManager
+@inject IJSRuntime JSRuntime
+@inject BlazorSchoolLanguageNotifier BlazorSchoolLanguageNotifier
+@inject ProtectedLocalStorage ProtectedLocalStorage
+
+<select @onchange="OnChangeLanguageAsync">
+    <option value="">Select</option>
+    <option value="en">English</option>
+    <option value="fr">France</option>
+</select>
+
+@code {
+    private async Task OnChangeLanguageAsync(ChangeEventArgs e)
+    {
+        string selectedCulture = e.Value as string;
+
+        if (!string.IsNullOrEmpty(selectedCulture))
+        {
+            await ProtectedLocalStorage.SetAsync("BlazorSchoolLanguage", selectedCulture);
+            BlazorSchoolLanguageNotifier.CurrentCulture = CultureInfo.GetCultureInfo(selectedCulture);
+            BlazorSchoolLanguageNotifier.NotifyLanguageChange();
+        }
+    }
+}

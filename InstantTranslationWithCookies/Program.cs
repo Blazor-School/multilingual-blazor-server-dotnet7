@@ -13,9 +13,9 @@ builder.Services.Configure<RequestLocalizationOptions>(options =>
     options.AddSupportedCultures(new[] { "en", "fr" });
     options.AddSupportedUICultures(new[] { "en", "fr" });
     options.RequestCultureProviders = new List<IRequestCultureProvider>()
-        {
-            new BlazorSchoolRequestCultureProvider("en")
-        };
+    {
+        new BlazorSchoolRequestCultureProvider(options)
+    };
 });
 
 var app = builder.Build();

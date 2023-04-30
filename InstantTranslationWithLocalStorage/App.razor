@@ -1,0 +1,40 @@
+﻿@using InstantTranslationWithLocalStorage.Utilities;
+@using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
+@using System.Globalization;
+@using Microsoft.Extensions.Options
+@inject ProtectedLocalStorage ProtectedLocalStorage
+@inject BlazorSchoolLanguageNotifier BlazorSchoolLanguageNotifier
+
+<Router AppAssembly="@typeof(App).Assembly">
+    <Found Context="routeData">
+        <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
+        <FocusOnNavigate RouteData="@routeData" Selector="h1" />
+    </Found>
+    <NotFound>
+        <PageTitle>Not found</PageTitle>
+        <LayoutView Layout="@typeof(MainLayout)">
+            <p role="alert">Sorry, there's nothing at this address.</p>
+        </LayoutView>
+    </NotFound>
+</Router>
+
+@code {
+    protected override async Task OnInitializedAsync() 
+    {
+        try // when render at server side, there is no local storage. Wrap the code in an empty try catch is necessary
+        {
+            var inputCultureLocalStorageResult = await ProtectedLocalStorage.GetAsync<string>("BlazorSchoolLanguage");
+
+            if (inputCultureLocalStorageResult.Success && !string.IsNullOrEmpty(inputCultureLocalStorageResult.Value))
+            {
+                var selectedCulture = CultureInfo.GetCultureInfo(inputCultureLocalStorageResult.Value);
+                BlazorSchoolLanguageNotifier.CurrentCulture = selectedCulture;
+            }
+
+            BlazorSchoolLanguageNotifier.NotifyLanguageChange();
+        }
+        catch
+        {
+        }
+    }
+}

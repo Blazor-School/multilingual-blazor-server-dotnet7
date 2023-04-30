@@ -7,43 +7,32 @@ namespace InstantTranslationWithUrl.Utilities;
 
 public class BlazorSchoolRequestCultureProvider : RequestCultureProvider
 {
-    private readonly string _defaultLanguage;
-    private string? _selectedLanguage;
+    private readonly RequestLocalizationOptions _options;
 
-    public BlazorSchoolRequestCultureProvider(string defaultLanguage)
+    public BlazorSchoolRequestCultureProvider(RequestLocalizationOptions options)
     {
-        _defaultLanguage = defaultLanguage;
+        _options = options;
     }
 
     public override Task<ProviderCultureResult?> DetermineProviderCultureResult(HttpContext httpContext)
     {
-        if (httpContext.Request.Headers["Sec-Fetch-Dest"] == "document")
-        {
-            string url = httpContext.Request.GetDisplayUrl();
-            _selectedLanguage = GetLanguageFromUrl(url);
+        string url = httpContext.Request.GetDisplayUrl();
+        var defaultCulture = _options.DefaultRequestCulture.Culture;
+        var selectedCulture = GetCultureFromUrl(url);
+        selectedCulture ??= defaultCulture;
+        CultureInfo.CurrentCulture = selectedCulture;
+        CultureInfo.CurrentUICulture = selectedCulture;
+        var result = new ProviderCultureResult(selectedCulture.Name);
 
-            if (string.IsNullOrEmpty(_selectedLanguage))
-            {
-                _selectedLanguage = _defaultLanguage;
-            }
-
-            CultureInfo.CurrentCulture = CultureInfo.GetCultureInfo(_selectedLanguage);
-            CultureInfo.CurrentUICulture = CultureInfo.GetCultureInfo(_selectedLanguage);
-            var result = new ProviderCultureResult(_selectedLanguage);
-
-            return Task.FromResult<ProviderCultureResult?>(result);
-        }
-        else
-        {
-            return Task.FromResult<ProviderCultureResult?>(new ProviderCultureResult(_selectedLanguage));
-        }
+        return Task.FromResult<ProviderCultureResult?>(result);
     }
 
-    private string? GetLanguageFromUrl(string url)
+    private CultureInfo? GetCultureFromUrl(string url)
     {
         var uri = new Uri(url);
         var urlParameters = HttpUtility.ParseQueryString(uri.Query);
+        var culture = CultureInfo.GetCultureInfo(urlParameters["language"] ?? "");
 
-        return urlParameters["language"];
+        return culture;
     }
 }

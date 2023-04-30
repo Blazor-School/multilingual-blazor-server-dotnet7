@@ -1,5 +1,6 @@
-using InstantTranslationWithUrl.Utilities;
+using InstantTranslationWithLocalStorage.Utilities;
 using Microsoft.AspNetCore.Localization;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,12 +11,9 @@ builder.Services.AddScoped<BlazorSchoolLanguageNotifier>();
 builder.Services.AddScoped(typeof(IStringLocalizer<>), typeof(BlazorSchoolStringLocalizer<>));
 builder.Services.Configure<RequestLocalizationOptions>(options =>
 {
+    options.SetDefaultCulture("fr");
     options.AddSupportedCultures(new[] { "en", "fr" });
     options.AddSupportedUICultures(new[] { "en", "fr" });
-    options.RequestCultureProviders = new List<IRequestCultureProvider>()
-        {
-            new BlazorSchoolRequestCultureProvider(options)
-        };
 });
 
 var app = builder.Build();

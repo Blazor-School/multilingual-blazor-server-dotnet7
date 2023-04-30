@@ -24,7 +24,6 @@
         {
             await ProtectedLocalStorage.SetAsync("BlazorSchoolLanguage", selectedCulture);
             BlazorSchoolLanguageNotifier.CurrentCulture = CultureInfo.GetCultureInfo(selectedCulture);
-            BlazorSchoolLanguageNotifier.NotifyLanguageChange();
         }
     }
 }

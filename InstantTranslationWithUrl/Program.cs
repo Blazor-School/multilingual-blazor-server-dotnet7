@@ -10,12 +10,9 @@ builder.Services.AddScoped<BlazorSchoolLanguageNotifier>();
 builder.Services.AddScoped(typeof(IStringLocalizer<>), typeof(BlazorSchoolStringLocalizer<>));
 builder.Services.Configure<RequestLocalizationOptions>(options =>
 {
+    options.SetDefaultCulture("fr");
     options.AddSupportedCultures(new[] { "en", "fr" });
     options.AddSupportedUICultures(new[] { "en", "fr" });
-    options.RequestCultureProviders = new List<IRequestCultureProvider>()
-        {
-            new BlazorSchoolRequestCultureProvider(options)
-        };
 });
 
 var app = builder.Build();

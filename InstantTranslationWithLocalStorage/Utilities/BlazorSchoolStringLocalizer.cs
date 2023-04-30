@@ -28,7 +28,7 @@ public class BlazorSchoolStringLocalizer<TComponent> : IStringLocalizer<TCompone
 
         try
         {
-            var resourceSet = resourceManager.GetResourceSet(CultureInfo.CurrentCulture, true, true);
+            var resourceSet = resourceManager.GetResourceSet(_blazorSchoolLanguageNotifier.CurrentCulture, true, true);
             result = resourceSet.Cast<DictionaryEntry>()
                 .Select(item => new LocalizedString((string)item.Key, (string)item.Value, false, GetResourceLocaltion()))
                 .ToList();

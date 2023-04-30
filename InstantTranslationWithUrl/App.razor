@@ -1,4 +1,11 @@
-﻿<Router AppAssembly="@typeof(App).Assembly">
+﻿@using InstantTranslationWithUrl.Utilities;
+@using System.Globalization;
+@using System.Web;
+@inject NavigationManager NavigationManager
+@inject BlazorSchoolLanguageNotifier BlazorSchoolLanguageNotifier
+@implements IDisposable
+
+<Router AppAssembly="@typeof(App).Assembly">
     <Found Context="routeData">
         <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
         <FocusOnNavigate RouteData="@routeData" Selector="h1" />
@@ -10,3 +17,33 @@
         </LayoutView>
     </NotFound>
 </Router>
+
+@code {
+    protected override void OnInitialized() 
+    {
+        NavigationManager.LocationChanged += OnLocationChanged;
+        LoadCulture();
+    }
+
+    private void LoadCulture()
+    {
+        var cultureFromUrl = GetCultureFromUrl(NavigationManager.Uri);
+        BlazorSchoolLanguageNotifier.CurrentCulture = cultureFromUrl;
+    }
+
+    private void OnLocationChanged(object? sender, LocationChangedEventArgs locationChangedEventArgs)
+    {
+        LoadCulture();
+    }
+
+    private CultureInfo GetCultureFromUrl(string url)
+    {
+        var uri = new Uri(url);
+        var urlParameters = HttpUtility.ParseQueryString(uri.Query);
+        var culture = CultureInfo.GetCultureInfo(urlParameters["language"] ?? "");
+
+        return culture;
+    }
+
+    public void Dispose() => NavigationManager.LocationChanged -= OnLocationChanged;
+}

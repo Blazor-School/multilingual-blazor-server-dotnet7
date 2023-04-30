@@ -23,8 +23,6 @@
         urlParameters["language"] = cultureEscaped;
         string urlWithoutQuery = uri.GetComponents(UriComponents.Path, UriFormat.Unescaped);
         NavigationManager.NavigateTo($"{urlWithoutQuery}?{urlParameters.ToString()}");
-        CultureInfo.CurrentCulture = CultureInfo.GetCultureInfo(cultureEscaped);
-        CultureInfo.CurrentUICulture = CultureInfo.GetCultureInfo(cultureEscaped);
-        BlazorSchoolLanguageNotifier.NotifyLanguageChange();
+        BlazorSchoolLanguageNotifier.CurrentCulture = CultureInfo.GetCultureInfo(cultureEscaped);
     }
 }

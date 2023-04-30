@@ -30,8 +30,6 @@
                 var selectedCulture = CultureInfo.GetCultureInfo(inputCultureLocalStorageResult.Value);
                 BlazorSchoolLanguageNotifier.CurrentCulture = selectedCulture;
             }
-
-            BlazorSchoolLanguageNotifier.NotifyLanguageChange();
         }
         catch
         {

@@ -9,11 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeferredTranslationWithCook
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeferredTranslationWithUrl", "DeferredTranslationWithUrl\DeferredTranslationWithUrl.csproj", "{388E4CD4-118D-4C0D-B667-48D898A7D867}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InstantTranslationWithCookies", "InstantTranslationWithCookies\InstantTranslationWithCookies.csproj", "{1CACEAD4-A9F4-4401-ADA9-828293F4EF1A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InstantTranslationWithUrl", "InstantTranslationWithUrl\InstantTranslationWithUrl.csproj", "{3F5AD9F7-E2EF-4D0E-9453-70952C6F7967}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InstantTranslationWithUrl", "InstantTranslationWithUrl\InstantTranslationWithUrl.csproj", "{3F5AD9F7-E2EF-4D0E-9453-70952C6F7967}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InstantTranslationWithLocalStorage", "InstantTranslationWithLocalStorage\InstantTranslationWithLocalStorage.csproj", "{3124C119-7AC0-4093-A0CE-9D4859E5DB6E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InstantTranslationWithLocalStorage", "InstantTranslationWithLocalStorage\InstantTranslationWithLocalStorage.csproj", "{3124C119-7AC0-4093-A0CE-9D4859E5DB6E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,10 +31,6 @@ Global
 		{388E4CD4-118D-4C0D-B667-48D898A7D867}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{388E4CD4-118D-4C0D-B667-48D898A7D867}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{388E4CD4-118D-4C0D-B667-48D898A7D867}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1CACEAD4-A9F4-4401-ADA9-828293F4EF1A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1CACEAD4-A9F4-4401-ADA9-828293F4EF1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1CACEAD4-A9F4-4401-ADA9-828293F4EF1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1CACEAD4-A9F4-4401-ADA9-828293F4EF1A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3F5AD9F7-E2EF-4D0E-9453-70952C6F7967}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3F5AD9F7-E2EF-4D0E-9453-70952C6F7967}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3F5AD9F7-E2EF-4D0E-9453-70952C6F7967}.Release|Any CPU.ActiveCfg = Release|Any CPU

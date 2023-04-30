@@ -10,13 +10,15 @@ namespace InstantTranslationWithUrl.Utilities;
 public class BlazorSchoolStringLocalizer<TComponent> : IStringLocalizer<TComponent>
 {
     private readonly IOptions<LocalizationOptions> _localizationOptions;
+    private readonly BlazorSchoolLanguageNotifier _blazorSchoolLanguageNotifier;
 
     public LocalizedString this[string name] => FindLocalziedString(name);
     public LocalizedString this[string name, params object[] arguments] => FindLocalziedString(name, arguments);
 
-    public BlazorSchoolStringLocalizer(IOptions<LocalizationOptions> localizationOptions)
+    public BlazorSchoolStringLocalizer(IOptions<LocalizationOptions> localizationOptions, BlazorSchoolLanguageNotifier blazorSchoolLanguageNotifier)
     {
         _localizationOptions = localizationOptions;
+        _blazorSchoolLanguageNotifier = blazorSchoolLanguageNotifier;
     }
 
     public IEnumerable<LocalizedString> GetAllStrings(bool includeParentCultures)
@@ -26,7 +28,7 @@ public class BlazorSchoolStringLocalizer<TComponent> : IStringLocalizer<TCompone
 
         try
         {
-            var resourceSet = resourceManager.GetResourceSet(CultureInfo.CurrentCulture, true, true);
+            var resourceSet = resourceManager.GetResourceSet(_blazorSchoolLanguageNotifier.CurrentCulture, true, true);
             result = resourceSet.Cast<DictionaryEntry>()
                 .Select(item => new LocalizedString((string)item.Key, (string)item.Value, false, GetResourceLocaltion()))
                 .ToList();
@@ -46,7 +48,7 @@ public class BlazorSchoolStringLocalizer<TComponent> : IStringLocalizer<TCompone
 
         try
         {
-            string value = resourceManager.GetString(key);
+            string value = resourceManager.GetString(key, _blazorSchoolLanguageNotifier.CurrentCulture);
 
             if (arguments is not null)
             {
